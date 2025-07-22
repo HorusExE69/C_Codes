@@ -6,7 +6,7 @@
 /*   By: hbretagn <hbretagn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/20 18:32:25 by hbretagn          #+#    #+#             */
-/*   Updated: 2025/07/20 18:36:53 by hbretagn         ###   ########.fr       */
+/*   Updated: 2025/07/21 18:48:55 by hbretagn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,8 +38,23 @@ char	*ft_strcat(char *dest, char *src)
 		dest[len_d + i] = src[i];
 		i ++;
 	}
-	dest[len_d + i + 1] = '\0';
-	return (*&dest);
+	return (dest);
+}
+
+int	s_malloc(int size, char **strs, char *sep)
+{
+	int	i;
+	int	len;
+
+	i = 0;
+	len = 0;
+	while (i < size)
+	{
+		len += ft_strlen(strs[i]);
+		i ++;
+	}
+	len += (size - 1) * ft_strlen(sep);
+	return (len);
 }
 
 char	*ft_strjoin(int size, char **strs, char *sep)
@@ -49,18 +64,23 @@ char	*ft_strjoin(int size, char **strs, char *sep)
 	char	*str;
 
 	i = 0;
-	len = 0;
-	while (i < size)
+	len = s_malloc(size, strs, sep);
+	if (size <= 0)
 	{
-		len += ft_strlen(strs[i]);
-		i ++;
+		str = malloc(sizeof(char));
+		str[0] = '\0';
+		return (str);
 	}
-	i = 0;
-	str = malloc(sizeof(char) * len);
+	else
+	{
+		str = malloc(sizeof(char) * (len + 1));
+		str[0] = 0;
+	}
 	while (i < size)
 	{
 		ft_strcat(str, strs[i]);
-		ft_strcat(str, sep);
+		if (i != size - 1)
+			ft_strcat(str, sep);
 		i ++;
 	}
 	return (str);
@@ -68,7 +88,8 @@ char	*ft_strjoin(int size, char **strs, char *sep)
 
 // int	main(void)
 // {
-// 	char	*strs[] = {"[1]    305454 segmentation fault","(core dumped)  ./exec.sh"};
+// 	char	*strs[] = {"[1]    305454 segmentation fault",
+// 	"(core dumped)  ./exec.sh"};
 // 	char	*sep = " ";
 // 	char	*chain = ft_strjoin(2, strs, sep);
 
@@ -76,4 +97,3 @@ char	*ft_strjoin(int size, char **strs, char *sep)
 // 	free(chain);
 // 	return (0);
 // }
-
