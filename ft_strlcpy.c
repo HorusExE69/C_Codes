@@ -16,15 +16,16 @@
 unsigned int	ft_strlcpy(char *dst, char *src, unsigned int size)
 {
 	unsigned int	i;
+	unsigned int	j;
 
 	if (!dst || !src)
 		return (0);
 	i = 0;
+	j = 0;
 	while (src[i])
 		i++;
 	if (size == 0)
 		return (i);
-	size_t    j = 0;
 	while (src[j] && j < size - 1)
 	{
 		dst[j] = src[j];
