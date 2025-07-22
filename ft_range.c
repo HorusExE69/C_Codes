@@ -17,7 +17,7 @@ int	*ft_range(int min, int max)
 {
 	long int	i;
 	long int	j;
-	int	*tab;
+	int			*tab;
 
 	tab = malloc(sizeof(int) * (max - min));
 	i = min;
