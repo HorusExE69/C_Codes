@@ -22,6 +22,16 @@ int	*ft_range(int min, int max)
 	tab = malloc(sizeof(int) * (max - min));
 	i = min;
 	j = 0;
+	if (max <= min)
+	{
+		tab = NULL;
+		return (tab);
+	}
+	if (!tab)
+	{
+		tab = NULL;
+		return (tab);
+	}
 	while (j < max - min)
 	{
 		tab[j] = i;
