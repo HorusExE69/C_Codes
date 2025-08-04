@@ -1,0 +1,3 @@
+#COFFRE FORT
+
+argent = 100000000
