@@ -1,0 +1,210 @@
+#include <iostream>
+#include <cmath>
+#include <stdlib.h>
+#include <unistd.h>
+using namespace std;
+
+struct vect{
+	float	x;
+	float	y;
+	float	z;
+};
+
+float	getSize(vect v)
+{
+	return (sqrt(v.x*v.x + v.y*v.y + v.z*v.z));
+}
+
+void	normVect(vect &v)
+{
+	float n;
+
+	n = getSize(v);
+	if(n != 0)
+	{
+		v.x /= n;
+		v.y /= n;
+		v.z /= n;
+	}
+}
+
+bool	isNorm(vect v)
+{
+	return(getSize(v) == 1);
+}
+
+vect	addVect(vect v1, vect v2)
+{
+	vect v3;
+
+	v3.x = v1.x + v2.x;
+	v3.y = v1.y + v2.y;
+	v3.z = v1.z + v2.z;
+	return(v3);
+}
+
+void	displayVect(vect v)
+{
+	printf("(%f,%f,%f)",  v.x, v.y, v.z);
+}
+
+void	fillTab(vect * tab, int s)
+{
+	int	i;
+
+	i = 0;
+	while(i < s)
+	{
+		tab[i].x = 10 - rand()%21;
+		tab[i].y = 10 - rand()%21;
+		tab[i].z = 10 - rand()%21;
+		i ++;
+	}
+}
+
+void	displayTab(vect * tab, int s)
+{
+	int	i;
+
+	i = 0;
+	while(i < s)
+	{
+		displayVect(tab[i]);
+		printf("\n");
+		i++;
+	}
+}
+
+int	maxTab(vect * tab, int s)
+{
+	int	i;
+	int	iMax;
+
+	i = 0;
+	iMax = 0;
+	while(i < s)
+	{
+		if(getSize(tab[i]) >= getSize(tab[iMax]))
+			iMax = i;
+		i ++;
+	}
+	return(iMax);
+}
+
+void	concateTab(vect * t1, vect * t2, vect * t3, int s1, int s2)
+{
+	int	i;
+	int	j;
+
+	i = 0;
+	j = 0;
+	while(j < s1)
+	{
+		t3[i] = t1[j];
+		j ++;
+		i ++;
+	}
+	j = 0;
+	while(j < s2)
+	{
+		t3[i] = t2[j];
+		j ++;
+		i ++;
+	}
+}
+
+void	reverseTab(vect * t, int s)
+{
+	vect 	*temp;
+	int	i;
+
+	i = 0;
+	temp = new vect[s];
+	while(i < s)
+	{
+		temp[i] = t[s - (1 + i)];
+		i ++;
+	}
+	i = 0;
+	while(i < s)
+	{
+		t[i] = temp[i];
+		i ++;
+	}
+	delete [] temp;
+}
+
+int	main(void)
+{
+	/*
+	vect	v1;
+	vect	v2;
+	vect	s;
+
+	v1 = {5,2,1};
+	v2 = {0,3,2};
+	printf("vecteur1 non normalise: ");
+	displayVect(v1);
+	printf("\n");
+	printf("vecteur2 non normalise: ");
+	displayVect(v2);
+	printf("\n");
+	printf("somme: ");
+	displayVect(addVect(v1,v2));
+	printf("\n");
+	normVect(v1);
+	normVect(v2);
+	printf("vecteur1 normalise: ");
+	displayVect(v1);
+	printf("\n");
+	printf("vecteur2 normalise: ");
+	displayVect(v2);
+	printf("\nsomme: ");
+	s = addVect(v1,v2);
+	displayVect(s);
+	if (isNorm(s))
+		printf(" est normalise");
+	else
+		printf(" n'est pas normalise");
+	*/
+
+	/*
+	vect	*tab;
+
+	tab = new vect[10];
+	fillTab(tab, 10);
+	displayTab(tab, 10);
+	printf("\n");
+	printf("Vecteur le plus grand : \n");
+	displayVect(tab[maxTab(tab, 10)]);
+	printf("\n");
+	delete [] tab;
+	*/
+
+  /*
+	vect	*t1;
+	vect	*t2;
+	vect	*t3;
+
+	t1 = new vect[5];
+	t2 = new vect[6];
+	t3 = new vect[11];
+	fillTab(t1, 5);
+	fillTab(t2, 6);
+	displayTab(t1,5);
+	printf("\n");
+	displayTab(t2,6);
+	printf("\n");
+	concateTab(t1, t2, t3, 5, 6);
+	displayTab(t3, 11);
+	printf("\n");
+	reverseTab(t3, 11);
+	displayTab(t3, 11);
+	printf("\n");
+	delete [] t1;
+	delete [] t2;
+	delete [] t3;
+  */
+
+	return(0);
+}
