@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   backtracking.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hbretagn <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: habretag <habretag@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/07/19 18:05:44 by hbretagn          #+#    #+#             */
-/*   Updated: 2025/07/19 18:21:26 by hbretagn         ###   ########.fr       */
+/*   Created: 2026/07/25 14:33:46 by habretag          #+#    #+#             */
+/*   Updated: 2026/07/25 17:05:49 by habretag         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,9 +51,7 @@ int	solve(int tab[4][4], int t_view [4][4], int l, int c)
 	int	val;
 
 	if (l == 4)
-	{
 		return (check_visibility(tab, t_view));
-	}
 	n_line = next_l(c, l);
 	n_col = next_c(c);
 	val = 1;

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   visibility.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hbretagn <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: habretag <habretag@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/07/20 09:46:52 by hbretagn          #+#    #+#             */
-/*   Updated: 2025/07/20 09:46:53 by hbretagn         ###   ########.fr       */
+/*   Created: 2026/07/25 14:12:29 by habretag          #+#    #+#             */
+/*   Updated: 2026/07/25 15:04:21 by habretag         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ int	count_visible_line(int line[4], int dir)
 			max = val;
 			l_count++;
 		}
-		i++;
+		i ++;
 	}
 	return (l_count);
 }
@@ -59,7 +59,7 @@ int	count_visible_column(int tab[4][4], int idx, int dir)
 			max = val;
 			c_count++;
 		}
-		i++;
+		i ++;
 	}
 	return (c_count);
 }
@@ -113,7 +113,7 @@ int	check_visibility(int tab[4][4], int t_view[4][4])
 			if (count_visible_column(tab, i, 0) != t_view[1][i])
 				return (0);
 		}
-		i++;
+		i ++;
 	}
 	return (1);
 }
