@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_putnbr_base.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hbretagn <hbretagn@student.42.fr>          +#+  +:+       +#+        */
+/*   By: habretag <habretag@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/07/21 19:34:19 by hbretagn          #+#    #+#             */
-/*   Updated: 2025/07/21 19:47:32 by hbretagn         ###   ########.fr       */
+/*   Created: 2026/07/14 12:12:46 by habretag          #+#    #+#             */
+/*   Updated: 2026/07/20 14:14:02 by habretag         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@ int	is_valid_base(char *base)
 	int	i;
 	int	j;
 
+	i = 0;
 	j = 0;
 	while (base[i])
 	{

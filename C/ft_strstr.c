@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strstr.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hbretagn <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: habretag <habretag@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/16 13:39:25 by hbretagn          #+#    #+#             */
-/*   Updated: 2025/07/20 13:00:00 by hbretagn         ###   ########.fr       */
+/*   Updated: 2026/07/20 14:39:33 by habretag         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,16 +29,15 @@ char	*ft_strstr(char *str, char *to_find)
 	}
 	return (0);
 }
-/*
-int	main(int ac, char **av)
-{
-	char *c;
 
-	if (ac == 3)
-	{
-		c = ft_strstr(av[1],av[2]);
-		__builtin_printf("%s",c);
-	}
-	return (0);
-}
-*/
+// int	main(int ac, char **av)
+// {
+// 	char *c;
+
+// 	if (ac == 3)
+// 	{
+// 		c = ft_strstr(av[1],av[2]);
+// 		__builtin_printf("%s",c);
+// 	}
+// 	return (0);
+// }
