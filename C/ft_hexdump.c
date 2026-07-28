@@ -7,61 +7,56 @@ int	is_dash_c(char *arg)
 	return (0);
 }
 
-unsigned char	*read_input(int argc, char **argv, int start, int *size)
+int	has_canonical(int argc, char **argv)
 {
-	unsigned char	*data;
-	int				i;
-	int				fd;
+	int	i;
 
-	*size = 0;
-	data = NULL;
-	if (start >= argc)
-		return (append_fd(0, data, size));
-	i = start;
+	i = 1;
 	while (i < argc)
 	{
-		fd = open(argv[i], O_RDONLY);
-		if (fd >= 0)
+		if (is_dash_c(argv[i]))
+			return (1);
+		i++;
+	}
+	return (0);
+}
+
+int	run_files(t_dump *d, int argc, char **argv)
+{
+	int	i;
+	int	fd;
+	int	args;
+
+	args = 0;
+	i = 1;
+	while (i < argc)
+	{
+		if (!is_dash_c(argv[i]))
 		{
-			data = append_fd(fd, data, size);
-			close(fd);
+			args++;
+			fd = open(argv[i], O_RDONLY);
+			if (fd < 0)
+				print_error(argv[0], argv[i]);
+			else
+			{
+				process_fd(d, fd);
+				close(fd);
+			}
 		}
 		i++;
 	}
-	return (data);
-}
-
-void	dump(unsigned char *data, int size, int canonical)
-{
-	if (canonical)
-		dump_canonical(data, size);
-	else
-		dump_default(data, size);
-	if (size <= 0)
-		return ;
-	if (canonical)
-		put_hex(size, 8);
-	else
-		put_hex(size, 7);
-	write(1, "\n", 1);
+	return (args);
 }
 
 int	main(int argc, char **argv)
 {
-	unsigned char	*data;
-	int				size;
-	int				canonical;
-	int				start;
+	t_dump	d;
+	int		args;
 
-	canonical = 0;
-	start = 1;
-	if (argc > 1 && is_dash_c(argv[1]))
-	{
-		canonical = 1;
-		start = 2;
-	}
-	data = read_input(argc, argv, start, &size);
-	dump(data, size, canonical);
-	free(data);
+	init_dump(&d, has_canonical(argc, argv));
+	args = run_files(&d, argc, argv);
+	if (args == 0)
+		process_fd(&d, 0);
+	finish(&d);
 	return (0);
 }

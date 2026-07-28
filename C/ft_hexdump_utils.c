@@ -16,41 +16,14 @@ void	put_hex(unsigned int n, int width)
 	write(1, buf, width);
 }
 
-void	copy_bytes(unsigned char *dst, unsigned char *src, int n)
+int	ft_strlen(char *str)
 {
 	int	i;
 
 	i = 0;
-	while (i < n)
-	{
-		dst[i] = src[i];
+	while (str[i])
 		i++;
-	}
-}
-
-unsigned char	*append_fd(int fd, unsigned char *data, int *size)
-{
-	unsigned char	buffer[4096];
-	unsigned char	*tmp;
-	int				ret;
-
-	ret = read(fd, buffer, 4096);
-	while (ret > 0)
-	{
-		tmp = malloc(*size + ret);
-		if (!tmp)
-		{
-			free(data);
-			return (NULL);
-		}
-		copy_bytes(tmp, data, *size);
-		copy_bytes(tmp + *size, buffer, ret);
-		free(data);
-		data = tmp;
-		*size += ret;
-		ret = read(fd, buffer, 4096);
-	}
-	return (data);
+	return (i);
 }
 
 int	lines_equal(unsigned char *a, unsigned char *b)
@@ -67,9 +40,14 @@ int	lines_equal(unsigned char *a, unsigned char *b)
 	return (1);
 }
 
-int	is_repeat(unsigned char *data, int off, int n)
+void	copy16(unsigned char *dst, unsigned char *src)
 {
-	if (off >= 16 && n == 16 && lines_equal(data + off, data + off - 16))
-		return (1);
-	return (0);
+	int	i;
+
+	i = 0;
+	while (i < 16)
+	{
+		dst[i] = src[i];
+		i++;
+	}
 }

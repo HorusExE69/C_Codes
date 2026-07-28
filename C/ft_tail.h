@@ -15,7 +15,12 @@ void	print_error(char *prog, char *file);
 char	*read_file(int fd, int *size);
 void	print_header(char *file, int mode);
 void	print_tail(char *data, int size, int nbytes);
+int		is_c_flag(char *arg);
+int		is_c_attached(char *arg);
+int		parse_args(int argc, char **argv, int *nbytes, int *nfiles);
+int		get_mode(int nfiles, int idx);
+void	print_c_error(char *prog);
 void	process_file(char *prog, char *file, int nbytes, int mode);
-void	process_stdin(int nbytes);
+void	process_all(int argc, char **argv, int nbytes, int nfiles);
 
 #endif
