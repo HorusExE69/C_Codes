@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_tail_read.c                                     :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: habretag <habretag@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/07/29 08:31:14 by habretag          #+#    #+#             */
+/*   Updated: 2026/07/29 11:28:13 by habretag         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "ft_tail.h"
 
 char	*read_file(int fd, int *size)
@@ -39,7 +51,8 @@ void	print_header(char *file, int mode)
 	write(1, " <==\n", 5);
 }
 
-void	print_tail(char *data, int size, int nbytes)
+void	print_tail(char *data, long long unsigned int size,
+			long long unsigned int nbytes)
 {
 	int	start;
 

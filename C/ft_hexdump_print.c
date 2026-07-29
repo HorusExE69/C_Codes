@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_hexdump_print.c                                 :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: habretag <habretag@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/07/29 08:32:56 by habretag          #+#    #+#             */
+/*   Updated: 2026/07/29 10:36:56 by habretag         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "ft_hexdump.h"
 
 void	print_ascii(unsigned char *line, int n)
@@ -74,12 +86,19 @@ void	print_line(t_dump *d, int n)
 		print_default_line(d->line, n, d->offset);
 }
 
-void	print_error(char *prog, char *file)
+void	print_error(char *prog, char *file, int nb, int max)
 {
 	write(2, basename(prog), ft_strlen(basename(prog)));
 	write(2, ": ", 2);
 	write(2, file, ft_strlen(file));
 	write(2, ": ", 2);
 	write(2, strerror(errno), ft_strlen(strerror(errno)));
+	if (nb == max - 1)
+	{
+		write(2, "\n", 1);
+		write(2, basename(prog), ft_strlen(basename(prog)));
+		write(2, ": ", 2);
+		write(2, "all input file arguments failed", 31);
+	}
 	write(2, "\n", 1);
 }

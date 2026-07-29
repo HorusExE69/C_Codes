@@ -1,6 +1,26 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_tail.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: habretag <habretag@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/07/29 08:31:04 by habretag          #+#    #+#             */
+/*   Updated: 2026/07/29 11:34:56 by habretag         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "ft_tail.h"
 
-void	process_file(char *prog, char *file, int nbytes, int mode)
+#include <unistd.h>
+
+void	ft_putchar(char c)
+{
+	write(1, &c, 1);
+}
+
+void	process_file(char *prog, char *file,
+				long long unsigned int nbytes, int mode)
 {
 	int		fd;
 	int		size;
@@ -19,7 +39,8 @@ void	process_file(char *prog, char *file, int nbytes, int mode)
 	free(data);
 }
 
-void	process_all(int argc, char **argv, int nbytes, int nfiles)
+void	process_all(int argc, char **argv,
+				long long unsigned int nbytes, int nfiles)
 {
 	int	i;
 	int	idx;
@@ -47,7 +68,7 @@ int	main(int argc, char **argv)
 	int	nbytes;
 	int	nfiles;
 
-	if (!parse_args(argc, argv, &nbytes, &nfiles))
+	if (parse_args(argc, argv, &nbytes, &nfiles) == 0)
 	{
 		print_c_error(basename(argv[0]));
 		return (1);

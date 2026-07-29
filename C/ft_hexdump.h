@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_hexdump.h                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: habretag <habretag@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/07/29 08:33:10 by habretag          #+#    #+#             */
+/*   Updated: 2026/07/29 10:36:01 by habretag         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef FT_HEXDUMP_H
 # define FT_HEXDUMP_H
 
@@ -26,7 +38,7 @@ void	print_ascii(unsigned char *line, int n);
 void	print_canon_line(unsigned char *line, int n, unsigned int off);
 void	print_default_line(unsigned char *line, int n, unsigned int off);
 void	print_line(t_dump *d, int n);
-void	print_error(char *prog, char *file);
+void	print_error(char *prog, char *file, int nb, int max);
 void	init_dump(t_dump *d, int canonical);
 void	feed(t_dump *d, unsigned char c);
 void	flush_full(t_dump *d);

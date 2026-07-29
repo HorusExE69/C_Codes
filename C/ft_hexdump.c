@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_hexdump.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: habretag <habretag@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/07/29 08:33:07 by habretag          #+#    #+#             */
+/*   Updated: 2026/07/29 10:35:54 by habretag         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "ft_hexdump.h"
 
 int	is_dash_c(char *arg)
@@ -36,7 +48,7 @@ int	run_files(t_dump *d, int argc, char **argv)
 			args++;
 			fd = open(argv[i], O_RDONLY);
 			if (fd < 0)
-				print_error(argv[0], argv[i]);
+				print_error(argv[0], argv[i], i, argc);
 			else
 			{
 				process_fd(d, fd);

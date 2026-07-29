@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_tail_parse.c                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: habretag <habretag@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/07/29 08:31:18 by habretag          #+#    #+#             */
+/*   Updated: 2026/07/29 11:34:05 by habretag         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "ft_tail.h"
 
 int	is_c_flag(char *arg)
@@ -31,7 +43,11 @@ int	parse_args(int argc, char **argv, int *nbytes, int *nfiles)
 			*nbytes = ft_atoi(argv[i]);
 		}
 		else if (is_c_attached(argv[i]))
+		{
 			*nbytes = ft_atoi(argv[i] + 2);
+			if (bytes_error(basename(argv[0]), argv[i] + 2))
+				return (2);
+		}
 		else
 			(*nfiles)++;
 		i++;
