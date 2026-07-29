@@ -1,15 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   ft_tail.h                                          :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: habretag <habretag@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/07/29 08:31:23 by habretag          #+#    #+#             */
-/*   Updated: 2026/07/29 11:34:46 by habretag         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #ifndef FT_TAIL_H
 # define FT_TAIL_H
 
@@ -20,23 +8,29 @@
 # include <errno.h>
 # include <libgen.h>
 
+typedef struct s_opts
+{
+	long	nbytes;
+	int		nfiles;
+	int		err;
+	char	*bad;
+}	t_opts;
+
 int		ft_strlen(char *str);
-int		ft_atoi(char *str);
 void	copy_bytes(char *dst, char *src, int n);
-void	print_error(char *prog, char *file);
+void	print_open_error(char *prog, char *file);
+int		get_mode(int nfiles, int idx);
 char	*read_file(int fd, int *size);
 void	print_header(char *file, int mode);
-void	print_tail(char *data, long long unsigned int size,
-			long long unsigned int nbytes);
+void	print_tail(char *data, int size, long nbytes);
 int		is_c_flag(char *arg);
 int		is_c_attached(char *arg);
-int		parse_args(int argc, char **argv, int *nbytes, int *nfiles);
-int		get_mode(int nfiles, int idx);
-void	print_c_error(char *prog);
-void	process_file(char *prog, char *file,
-			long long unsigned int nbytes, int mode);
-void	process_all(int argc, char **argv,
-			long long unsigned int nbytes, int nfiles);
-int		bytes_error(char *prog, char *b);
+int		parse_number(char *s, long *out);
+void	init_opts(t_opts *o);
+void	handle_value(t_opts *o, char *arg);
+void	parse_args(int argc, char **argv, t_opts *o);
+void	print_opt_error(char *prog, t_opts *o);
+int		process_file(char *prog, char *file, long nbytes, int mode);
+int		process_all(int argc, char **argv, long nbytes, int nfiles);
 
 #endif

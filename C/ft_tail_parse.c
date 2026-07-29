@@ -1,15 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   ft_tail_parse.c                                    :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: habretag <habretag@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/07/29 08:31:18 by habretag          #+#    #+#             */
-/*   Updated: 2026/07/29 11:34:05 by habretag         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "ft_tail.h"
 
 int	is_c_flag(char *arg)
@@ -26,49 +14,52 @@ int	is_c_attached(char *arg)
 	return (0);
 }
 
-int	parse_args(int argc, char **argv, int *nbytes, int *nfiles)
+int	parse_number(char *s, long *out)
 {
-	int	i;
+	unsigned long long	n;
+	int					i;
+	int					over;
 
-	*nbytes = 0;
-	*nfiles = 0;
-	i = 1;
-	while (i < argc)
+	n = 0;
+	over = 0;
+	i = 0;
+	if (s[i] == '+' || s[i] == '-')
+		i++;
+	if (!s[i])
+		return (2);
+	while (s[i])
 	{
-		if (is_c_flag(argv[i]))
-		{
-			i++;
-			if (i >= argc)
-				return (0);
-			*nbytes = ft_atoi(argv[i]);
-		}
-		else if (is_c_attached(argv[i]))
-		{
-			*nbytes = ft_atoi(argv[i] + 2);
-			if (bytes_error(basename(argv[0]), argv[i] + 2))
-				return (2);
-		}
-		else
-			(*nfiles)++;
+		if (s[i] < '0' || s[i] > '9')
+			return (2);
+		if (n > 922337203685477580ULL)
+			over = 1;
+		n = n * 10 + (s[i] - '0');
+		if (n > 9223372036854775807ULL)
+			over = 1;
 		i++;
 	}
-	return (1);
+	if (over)
+		return (3);
+	*out = (long)n;
+	return (0);
 }
 
-int	get_mode(int nfiles, int idx)
+void	init_opts(t_opts *o)
 {
-	if (nfiles <= 1)
-		return (0);
-	if (idx == 0)
-		return (1);
-	return (2);
+	o->nbytes = 0;
+	o->nfiles = 0;
+	o->err = 0;
+	o->bad = NULL;
 }
 
-void	print_c_error(char *prog)
+void	handle_value(t_opts *o, char *arg)
 {
-	write(2, prog, ft_strlen(prog));
-	write(2, ": option requires an argument -- 'c'\n", 37);
-	write(2, "Try '", 5);
-	write(2, prog, ft_strlen(prog));
-	write(2, " --help' for more information.\n", 31);
+	int	r;
+
+	r = parse_number(arg, &o->nbytes);
+	if (r != 0)
+	{
+		o->err = r;
+		o->bad = arg;
+	}
 }

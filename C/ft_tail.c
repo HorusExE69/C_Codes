@@ -1,26 +1,50 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   ft_tail.c                                          :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: habretag <habretag@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/07/29 08:31:04 by habretag          #+#    #+#             */
-/*   Updated: 2026/07/29 11:34:56 by habretag         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "ft_tail.h"
 
-#include <unistd.h>
-
-void	ft_putchar(char c)
+void	parse_args(int argc, char **argv, t_opts *o)
 {
-	write(1, &c, 1);
+	int	i;
+
+	init_opts(o);
+	i = 1;
+	while (i < argc && o->err == 0)
+	{
+		if (is_c_flag(argv[i]))
+		{
+			i++;
+			if (i >= argc)
+				o->err = 1;
+			else
+				handle_value(o, argv[i]);
+		}
+		else if (is_c_attached(argv[i]))
+			handle_value(o, argv[i] + 2);
+		else
+			o->nfiles++;
+		i++;
+	}
 }
 
-void	process_file(char *prog, char *file,
-				long long unsigned int nbytes, int mode)
+void	print_opt_error(char *prog, t_opts *o)
+{
+	write(2, prog, ft_strlen(prog));
+	if (o->err == 1)
+	{
+		write(2, ": option requires an argument -- 'c'\n", 37);
+		write(2, "Try '", 5);
+		write(2, prog, ft_strlen(prog));
+		write(2, " --help' for more information.\n", 31);
+		return ;
+	}
+	write(2, ": invalid number of bytes: ", 27);
+	write(2, "\xe2\x80\x98", 3);
+	write(2, o->bad, ft_strlen(o->bad));
+	write(2, "\xe2\x80\x99", 3);
+	if (o->err == 3)
+		write(2, ": Value too large for defined data type", 39);
+	write(2, "\n", 1);
+}
+
+int	process_file(char *prog, char *file, long nbytes, int mode)
 {
 	int		fd;
 	int		size;
@@ -29,23 +53,25 @@ void	process_file(char *prog, char *file,
 	fd = open(file, O_RDONLY);
 	if (fd < 0)
 	{
-		print_error(prog, file);
-		return ;
+		print_open_error(prog, file);
+		return (1);
 	}
 	data = read_file(fd, &size);
 	close(fd);
 	print_header(file, mode);
 	print_tail(data, size, nbytes);
 	free(data);
+	return (0);
 }
 
-void	process_all(int argc, char **argv,
-				long long unsigned int nbytes, int nfiles)
+int	process_all(int argc, char **argv, long nbytes, int nfiles)
 {
 	int	i;
 	int	idx;
+	int	fails;
 
 	idx = 0;
+	fails = 0;
 	i = 1;
 	while (i < argc)
 	{
@@ -55,26 +81,30 @@ void	process_all(int argc, char **argv,
 			i += 1;
 		else
 		{
-			process_file(basename(argv[0]), argv[i], nbytes,
-				get_mode(nfiles, idx));
+			fails += process_file(basename(argv[0]), argv[i], nbytes,
+					get_mode(nfiles, idx));
 			idx++;
 			i += 1;
 		}
 	}
+	return (fails);
 }
 
 int	main(int argc, char **argv)
 {
-	int	nbytes;
-	int	nfiles;
+	t_opts	o;
+	int		fails;
 
-	if (parse_args(argc, argv, &nbytes, &nfiles) == 0)
+	parse_args(argc, argv, &o);
+	if (o.err != 0)
 	{
-		print_c_error(basename(argv[0]));
+		print_opt_error(basename(argv[0]), &o);
 		return (1);
 	}
-	if (nfiles == 0)
+	if (o.nfiles == 0)
 		return (0);
-	process_all(argc, argv, nbytes, nfiles);
+	fails = process_all(argc, argv, o.nbytes, o.nfiles);
+	if (fails > 0)
+		return (1);
 	return (0);
 }
