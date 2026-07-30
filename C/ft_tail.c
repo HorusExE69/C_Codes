@@ -48,6 +48,7 @@ int	process_file(char *prog, char *file, long nbytes, int mode)
 {
 	int		fd;
 	int		size;
+	int		rerr;
 	char	*data;
 
 	fd = open(file, O_RDONLY);
@@ -56,9 +57,15 @@ int	process_file(char *prog, char *file, long nbytes, int mode)
 		print_open_error(prog, file);
 		return (1);
 	}
-	data = read_file(fd, &size);
-	close(fd);
 	print_header(file, mode);
+	data = read_file(fd, &size, &rerr);
+	close(fd);
+	if (rerr)
+	{
+		print_read_error(prog, file);
+		free(data);
+		return (1);
+	}
 	print_tail(data, size, nbytes);
 	free(data);
 	return (0);
@@ -81,7 +88,7 @@ int	process_all(int argc, char **argv, long nbytes, int nfiles)
 			i += 1;
 		else
 		{
-			fails += process_file(basename(argv[0]), argv[i], nbytes,
+			fails += process_file(argv[0], argv[i], nbytes,
 					get_mode(nfiles, idx));
 			idx++;
 			i += 1;
@@ -98,7 +105,7 @@ int	main(int argc, char **argv)
 	parse_args(argc, argv, &o);
 	if (o.err != 0)
 	{
-		print_opt_error(basename(argv[0]), &o);
+		print_opt_error(argv[0], &o);
 		return (1);
 	}
 	if (o.nfiles == 0)

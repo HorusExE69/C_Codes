@@ -1,30 +1,41 @@
 #include "ft_tail.h"
 
-char	*read_file(int fd, int *size)
+static char	*grow(char *data, int size, char *buf, int ret)
+{
+	char	*tmp;
+
+	tmp = malloc(size + ret);
+	if (!tmp)
+	{
+		free(data);
+		return (NULL);
+	}
+	copy_bytes(tmp, data, size);
+	copy_bytes(tmp + size, buf, ret);
+	free(data);
+	return (tmp);
+}
+
+char	*read_file(int fd, int *size, int *rerr)
 {
 	char	buffer[4096];
 	char	*data;
-	char	*tmp;
 	int		ret;
 
 	*size = 0;
+	*rerr = 0;
 	data = NULL;
 	ret = read(fd, buffer, 4096);
 	while (ret > 0)
 	{
-		tmp = malloc(*size + ret);
-		if (!tmp)
-		{
-			free(data);
+		data = grow(data, *size, buffer, ret);
+		if (!data)
 			return (NULL);
-		}
-		copy_bytes(tmp, data, *size);
-		copy_bytes(tmp + *size, buffer, ret);
-		free(data);
-		data = tmp;
 		*size += ret;
 		ret = read(fd, buffer, 4096);
 	}
+	if (ret < 0)
+		*rerr = 1;
 	return (data);
 }
 

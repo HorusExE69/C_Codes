@@ -32,6 +32,16 @@ void	print_open_error(char *prog, char *file)
 	write(2, "\n", 1);
 }
 
+void	print_read_error(char *prog, char *file)
+{
+	write(2, prog, ft_strlen(prog));
+	write(2, ": error reading '", 17);
+	write(2, file, ft_strlen(file));
+	write(2, "': ", 3);
+	write(2, strerror(errno), ft_strlen(strerror(errno)));
+	write(2, "\n", 1);
+}
+
 int	get_mode(int nfiles, int idx)
 {
 	if (nfiles <= 1)

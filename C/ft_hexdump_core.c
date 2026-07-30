@@ -53,7 +53,7 @@ void	finish(t_dump *d)
 	write(1, "\n", 1);
 }
 
-void	process_fd(t_dump *d, int fd)
+int	process_fd(t_dump *d, int fd)
 {
 	unsigned char	buffer[4096];
 	int				ret;
@@ -70,4 +70,5 @@ void	process_fd(t_dump *d, int fd)
 		}
 		ret = read(fd, buffer, 4096);
 	}
+	return (ret < 0);
 }

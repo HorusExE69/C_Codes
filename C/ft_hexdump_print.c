@@ -76,7 +76,7 @@ void	print_line(t_dump *d, int n)
 
 void	print_error(char *prog, char *file)
 {
-	write(2, basename(prog), ft_strlen(basename(prog)));
+	write(2, prog, ft_strlen(prog));
 	write(2, ": ", 2);
 	write(2, file, ft_strlen(file));
 	write(2, ": ", 2);

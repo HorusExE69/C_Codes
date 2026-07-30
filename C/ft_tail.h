@@ -6,7 +6,6 @@
 # include <stdlib.h>
 # include <string.h>
 # include <errno.h>
-# include <libgen.h>
 
 typedef struct s_opts
 {
@@ -19,8 +18,9 @@ typedef struct s_opts
 int		ft_strlen(char *str);
 void	copy_bytes(char *dst, char *src, int n);
 void	print_open_error(char *prog, char *file);
+void	print_read_error(char *prog, char *file);
 int		get_mode(int nfiles, int idx);
-char	*read_file(int fd, int *size);
+char	*read_file(int fd, int *size, int *rerr);
 void	print_header(char *file, int mode);
 void	print_tail(char *data, int size, long nbytes);
 int		is_c_flag(char *arg);
