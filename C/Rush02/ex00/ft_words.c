@@ -54,3 +54,18 @@ void	print_words(t_entry *dict, unsigned long long *keys, int n)
 	}
 	write(1, "\n", 1);
 }
+
+int	convert(t_entry *dict, unsigned long long n)
+{
+	unsigned long long	keys[512];
+	int					count;
+
+	count = 0;
+	if (decompose(dict, n, keys, &count) || !all_present(dict, keys, count))
+	{
+		write(1, "Dict Error\n", 11);
+		return (1);
+	}
+	print_words(dict, keys, count);
+	return (0);
+}

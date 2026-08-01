@@ -1,88 +1,58 @@
 #include "rush02.h"
 
-static unsigned long long	scale_at(int idx)
-{
-	unsigned long long	s;
-	int					i;
-
-	s = 1;
-	i = 0;
-	while (i < idx)
-	{
-		s = s * 1000;
-		i++;
-	}
-	return (s);
-}
-
 static void	push(unsigned long long *keys, int *count, unsigned long long v)
 {
 	keys[*count] = v;
 	(*count)++;
 }
 
-static void	decompose_group(unsigned long long g, unsigned long long *keys,
-		int *count)
+static int	is_mult(unsigned long long k)
 {
-	unsigned long long	r;
-
-	if (g >= 100)
-	{
-		push(keys, count, g / 100);
-		push(keys, count, 100);
-	}
-	r = g % 100;
-	if (r == 0)
-		return ;
-	if (r < 20)
-	{
-		push(keys, count, r);
-		return ;
-	}
-	push(keys, count, (r / 10) * 10);
-	if (r % 10 != 0)
-		push(keys, count, r % 10);
+	if (k == 100)
+		return (1);
+	if (k < 1000)
+		return (0);
+	while (k % 1000 == 0)
+		k = k / 1000;
+	return (k == 1);
 }
 
-static void	decompose(unsigned long long n, unsigned long long *keys,
+static unsigned long long	largest_key(t_entry *dict, unsigned long long n)
+{
+	unsigned long long	best;
+
+	best = 0;
+	while (dict)
+	{
+		if (dict->key <= n && dict->key > best)
+			best = dict->key;
+		dict = dict->next;
+	}
+	return (best);
+}
+
+int	decompose(t_entry *dict, unsigned long long n, unsigned long long *keys,
 		int *count)
 {
-	int					idx;
-	unsigned long long	scale;
-	unsigned long long	group;
+	unsigned long long	big;
 
-	*count = 0;
+	if (*count >= 500)
+		return (1);
 	if (n == 0)
 	{
 		push(keys, count, 0);
-		return ;
+		return (0);
 	}
-	idx = 6;
-	while (idx >= 0)
-	{
-		scale = scale_at(idx);
-		group = (n / scale) % 1000;
-		if (group != 0)
-		{
-			decompose_group(group, keys, count);
-			if (idx > 0)
-				push(keys, count, scale);
-		}
-		idx--;
-	}
-}
-
-int	convert(t_entry *dict, unsigned long long n)
-{
-	unsigned long long	keys[256];
-	int					count;
-
-	decompose(n, keys, &count);
-	if (!all_present(dict, keys, count))
-	{
-		write(1, "Dict Error\n", 11);
+	big = largest_key(dict, n);
+	if (big == 0 || (big == 1 && n > 1))
 		return (1);
+	if (is_mult(big) || n / big > 1)
+	{
+		if (decompose(dict, n / big, keys, count))
+			return (1);
 	}
-	print_words(dict, keys, count);
+	push(keys, count, big);
+	if (n % big != 0)
+		return (decompose(dict, n % big, keys, count));
 	return (0);
 }

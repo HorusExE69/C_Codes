@@ -31,8 +31,13 @@ void		free_dict(t_entry *head);
 char		*lookup(t_entry *dict, unsigned long long key);
 int			all_present(t_entry *dict, unsigned long long *keys, int n);
 void		print_words(t_entry *dict, unsigned long long *keys, int n);
+int			decompose(t_entry *dict, unsigned long long n,
+				unsigned long long *keys, int *count);
 int			convert(t_entry *dict, unsigned long long n);
+int			convert_str(t_entry *dict, char *numstr);
+int			empty_line(char *s);
+int			process_lines(t_entry *dict, char *s);
+int			convert_stdin(t_entry *dict);
 int			run(char *path, char *numstr);
-int			run_stdin(void);
 
 #endif

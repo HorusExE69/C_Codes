@@ -1,7 +1,7 @@
 NAME = rush-02
 CC = cc
 CFLAGS = -Wall -Wextra -Werror
-SRC = main.c ft_utils.c ft_read.c ft_dict.c ft_words.c ft_convert.c
+SRC = main.c ft_utils.c ft_read.c ft_dict.c ft_words.c ft_convert.c ft_stdin.c
 OBJ = $(SRC:.c=.o)
 
 all: $(NAME)
