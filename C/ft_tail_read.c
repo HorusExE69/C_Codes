@@ -1,5 +1,21 @@
 #include "ft_tail.h"
 
+char	*ft_basename(char *path)
+{
+	char	*base;
+	int		i;
+
+	base = path;
+	i = 0;
+	while (path[i])
+	{
+		if (path[i] == '/')
+			base = path + i + 1;
+		i++;
+	}
+	return (base);
+}
+
 static char	*grow(char *data, int size, char *buf, int ret)
 {
 	char	*tmp;
@@ -39,15 +55,16 @@ char	*read_file(int fd, int *size, int *rerr)
 	return (data);
 }
 
-void	print_header(char *file, int mode)
+void	print_header(char *file, int *printed)
 {
-	if (mode == 0)
+	if (*printed < 0)
 		return ;
-	if (mode == 2)
+	if (*printed == 1)
 		write(1, "\n", 1);
 	write(1, "==> ", 4);
 	write(1, file, ft_strlen(file));
 	write(1, " <==\n", 5);
+	*printed = 1;
 }
 
 void	print_tail(char *data, int size, long nbytes)

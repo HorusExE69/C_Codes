@@ -59,7 +59,7 @@ void	run_files(t_dump *d, int argc, char **argv, t_stat *st)
 		if (!is_dash_c(argv[i]))
 		{
 			st->nargs++;
-			r = open_one(d, argv[0], argv[i]);
+			r = open_one(d, ft_basename(argv[0]), argv[i]);
 			if (r == 1)
 				st->openfails++;
 			if (r != 0)
@@ -85,7 +85,7 @@ int	main(int argc, char **argv)
 	finish(&d);
 	if (st.openfails == st.nargs)
 	{
-		write(2, argv[0], ft_strlen(argv[0]));
+		write(2, ft_basename(argv[0]), ft_strlen(ft_basename(argv[0])));
 		write(2, ": all input file arguments failed\n", 34);
 		return (1);
 	}

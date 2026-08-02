@@ -26,6 +26,22 @@ int	ft_strlen(char *str)
 	return (i);
 }
 
+char	*ft_basename(char *path)
+{
+	char	*base;
+	int		i;
+
+	base = path;
+	i = 0;
+	while (path[i])
+	{
+		if (path[i] == '/')
+			base = path + i + 1;
+		i++;
+	}
+	return (base);
+}
+
 int	lines_equal(unsigned char *a, unsigned char *b)
 {
 	int	i;

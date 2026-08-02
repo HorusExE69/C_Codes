@@ -26,15 +26,16 @@ void	parse_args(int argc, char **argv, t_opts *o)
 
 void	print_opt_error(char *prog, t_opts *o)
 {
-	write(2, prog, ft_strlen(prog));
 	if (o->err == 1)
 	{
+		write(2, ft_basename(prog), ft_strlen(ft_basename(prog)));
 		write(2, ": option requires an argument -- 'c'\n", 37);
 		write(2, "Try '", 5);
 		write(2, prog, ft_strlen(prog));
 		write(2, " --help' for more information.\n", 31);
 		return ;
 	}
+	write(2, prog, ft_strlen(prog));
 	write(2, ": invalid number of bytes: ", 27);
 	write(2, "\xe2\x80\x98", 3);
 	write(2, o->bad, ft_strlen(o->bad));
@@ -44,7 +45,7 @@ void	print_opt_error(char *prog, t_opts *o)
 	write(2, "\n", 1);
 }
 
-int	process_file(char *prog, char *file, long nbytes, int mode)
+int	process_file(char *prog, char *file, long nbytes, int *printed)
 {
 	int		fd;
 	int		size;
@@ -57,7 +58,7 @@ int	process_file(char *prog, char *file, long nbytes, int mode)
 		print_open_error(prog, file);
 		return (1);
 	}
-	print_header(file, mode);
+	print_header(file, printed);
 	data = read_file(fd, &size, &rerr);
 	close(fd);
 	if (rerr)
@@ -74,11 +75,13 @@ int	process_file(char *prog, char *file, long nbytes, int mode)
 int	process_all(int argc, char **argv, long nbytes, int nfiles)
 {
 	int	i;
-	int	idx;
+	int	printed;
 	int	fails;
 
-	idx = 0;
 	fails = 0;
+	printed = -1;
+	if (nfiles > 1)
+		printed = 0;
 	i = 1;
 	while (i < argc)
 	{
@@ -88,9 +91,7 @@ int	process_all(int argc, char **argv, long nbytes, int nfiles)
 			i += 1;
 		else
 		{
-			fails += process_file(argv[0], argv[i], nbytes,
-					get_mode(nfiles, idx));
-			idx++;
+			fails += process_file(argv[0], argv[i], nbytes, &printed);
 			i += 1;
 		}
 	}
@@ -108,6 +109,8 @@ int	main(int argc, char **argv)
 		print_opt_error(argv[0], &o);
 		return (1);
 	}
+	if (o.nbytes == 0)
+		return (0);
 	if (o.nfiles == 0)
 		return (0);
 	fails = process_all(argc, argv, o.nbytes, o.nfiles);

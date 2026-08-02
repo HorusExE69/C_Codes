@@ -26,6 +26,7 @@ typedef struct s_stat
 
 void	put_hex(unsigned int n, int width);
 int		ft_strlen(char *str);
+char	*ft_basename(char *path);
 int		lines_equal(unsigned char *a, unsigned char *b);
 void	copy16(unsigned char *dst, unsigned char *src);
 void	print_ascii(unsigned char *line, int n);
