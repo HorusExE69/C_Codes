@@ -112,7 +112,7 @@ int	main(int argc, char **argv)
 	if (o.nbytes == 0)
 		return (0);
 	if (o.nfiles == 0)
-		return (0);
+		return (process_stdin(o.nbytes));
 	fails = process_all(argc, argv, o.nbytes, o.nfiles);
 	if (fails > 0)
 		return (1);

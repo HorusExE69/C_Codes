@@ -41,3 +41,16 @@ void	print_read_error(char *prog, char *file)
 	write(2, strerror(errno), ft_strlen(strerror(errno)));
 	write(2, "\n", 1);
 }
+
+int	process_stdin(long nbytes)
+{
+	int		size;
+	int		rerr;
+	char	*data;
+
+	data = read_file(0, &size, &rerr);
+	if (!rerr)
+		print_tail(data, size, nbytes);
+	free(data);
+	return (rerr != 0);
+}

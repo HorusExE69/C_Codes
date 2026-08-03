@@ -31,6 +31,7 @@ void	handle_value(t_opts *o, char *arg);
 void	parse_args(int argc, char **argv, t_opts *o);
 void	print_opt_error(char *prog, t_opts *o);
 int		process_file(char *prog, char *file, long nbytes, int *printed);
+int		process_stdin(long nbytes);
 int		process_all(int argc, char **argv, long nbytes, int nfiles);
 
 #endif
