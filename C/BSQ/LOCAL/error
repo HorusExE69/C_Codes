@@ -1,0 +1,232 @@
+#include "bsq.h"
+
+void	fill_curr_line(t_map *map, t_data *buf, t_point *res)
+{
+	long long	j;
+
+	j = 0;
+	while (j < map->cols)
+	{
+		if (map->data[buf->i * map->cols + j] == map->obstacle)
+			buf->curr[j] = 0;
+		else if (buf->i == 0 || j == 0)
+			buf->curr[j] = 1;
+		else
+			buf->curr[j] = 1 + min(buf->prev[j],
+					buf->curr[j - 1], buf->prev[j - 1]);
+		update_result(res, buf->curr[j], buf->i, j);
+		j++;
+	}
+}
+
+void	fill_square(t_map *map, t_point square)
+{
+	long long int	i;
+	long long int	j;
+
+	i = 0;
+	while (i < square.size)
+	{
+		j = 0;
+		while (j < square.size)
+		{
+			map->data[(square.y + i) * map->cols + (square.x + j)] = map->full;
+			j++;
+		}
+		i++;
+	}
+}
+
+void	fill_map_data(char *buf, int start, char *data)
+{
+	int	j;
+
+	j = 0;
+	while (buf[start])
+	{
+		if (buf[start] != '\n')
+			data[j++] = buf[start];
+		start++;
+	}
+}
+
+void	fill_data_from_buffer(t_map *map, t_read *reader)
+{
+	int	i;
+
+	i = 0;
+	while (i < reader->nbytes && reader->total < map->cols * map->rows)
+	{
+		if (reader->buf[i] != '\n')
+		{
+			map->data[reader->total] = reader->buf[i];
+			reader->total++;
+		}
+		i++;
+	}
+}
+
+
+#include "bsq.h"
+
+void	reading(t_read_stdin *stdin)
+{
+	long long int	i;
+
+	i = 0;
+	while (i < stdin->total)
+	{
+		stdin->tmp[i] = stdin->result[i];
+		i++;
+	}
+	free(stdin->result);
+	i = 0;
+	while (i < stdin->bytes)
+	{
+		stdin->tmp[stdin->total + i] = stdin->buffer[i];
+		i++;
+	}
+}
+
+char	*read_stdin(void)
+{
+	char			buffer[READ_BUF_SIZE];
+	t_read_stdin	stdin;
+
+	stdin.result = NULL;
+	stdin.total = 0;
+	stdin.bytes = read(0, buffer, READ_BUF_SIZE);
+	while (stdin.bytes > 0)
+	{
+		stdin.tmp = malloc(stdin.total + stdin.bytes + 1);
+		if (!stdin.tmp)
+			return (free(stdin.result), NULL);
+		stdin.buffer = buffer;
+		reading(&stdin);
+		stdin.total += stdin.bytes;
+		stdin.tmp[stdin.total] = '\0';
+		stdin.result = stdin.tmp;
+		stdin.bytes = read(0, buffer, READ_BUF_SIZE);
+	}
+	if (stdin.result[stdin.total - 1] != '\n')
+		stdin.result[stdin.total] = '\n';
+	return (stdin.result);
+}
+
+void	read_map_from_buffer(char *buf, t_map *map)
+{
+	int	i;
+
+	i = 0;
+	while (buf[i] && buf[i] != '\n')
+		i++;
+	i++;
+	map->cols = get_map_cols(buf, i);
+	map->rows = get_map_rows(buf, i);
+	map->obstacle = 'o';
+	map->empty = '.';
+	map->full = 'x';
+	map->data = malloc(sizeof(char) * (map->cols * map->rows + 1));
+	fill_map_data(buf, i, map->data);
+}
+
+
+
+==148629== Memcheck, a memory error detector
+==148629== Copyright (C) 2002-2017, and GNU GPL'd, by Julian Seward et al.
+==148629== Using Valgrind-3.18.1 and LibVEX; rerun with -h for copyright info
+==148629== Command: ./bsq
+==148629== 
+30.ox
+..................o......
+.....o...................
+o....o...................
+........................o
+.........................
+.......o.................
+..o......................
+...o..........o..........
+.........................
+........................o
+.........................
+.........................
+................o........
+.................o.......
+.........................
+.......o...........o..o..
+...o.....................
+.................o.......
+..........o..............
+.....................o...
+.....................o.o.
+.........................
+.........................
+.........................
+.........................
+........................o
+...o..........o..........
+...o....................o
+o........................
+..................o......==148629== Invalid read of size 1
+==148629==    at 0x40231A: get_map_rows (utils2.c:39)
+==148629==    by 0x4021BF: read_map_from_buffer (stdin.c:68)
+==148629==    by 0x40123C: main (bsq.c:35)
+==148629==  Address 0x4aa58c2 is 0 bytes after a block of size 786 alloc'd
+==148629==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==148629==    by 0x40203F: read_stdin (stdin.c:44)
+==148629==    by 0x40122B: main (bsq.c:34)
+==148629== 
+==148629== Invalid read of size 1
+==148629==    at 0x401E1E: fill_map_data (fill.c:57)
+==148629==    by 0x40221D: read_map_from_buffer (stdin.c:73)
+==148629==    by 0x40123C: main (bsq.c:35)
+==148629==  Address 0x4aa58c2 is 0 bytes after a block of size 786 alloc'd
+==148629==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==148629==    by 0x40203F: read_stdin (stdin.c:44)
+==148629==    by 0x40122B: main (bsq.c:34)
+==148629== 
+..................o......
+.....o...................
+o....o...................
+........................o
+.........................
+.......o.................
+..o......................
+...o..........o..........
+.........................
+........................o
+.........................
+.........................
+................o........
+.................o.......
+.........................
+.......o...........o..o..
+...o.....................
+.................o.......
+..........o..............
+....xxxxxxxxxx.......o...
+....xxxxxxxxxx.......o.o.
+....xxxxxxxxxx...........
+....xxxxxxxxxx...........
+....xxxxxxxxxx...........
+....xxxxxxxxxx...........
+....xxxxxxxxxx..........o
+...oxxxxxxxxxxo..........
+...oxxxxxxxxxx..........o
+o...xxxxxxxxxx...........
+..................o......
+==148629== 
+==148629== HEAP SUMMARY:
+==148629==     in use at exit: 786 bytes in 1 blocks
+==148629==   total heap usage: 35 allocs, 34 frees, 14,237 bytes allocated
+==148629== 
+==148629== LEAK SUMMARY:
+==148629==    definitely lost: 786 bytes in 1 blocks
+==148629==    indirectly lost: 0 bytes in 0 blocks
+==148629==      possibly lost: 0 bytes in 0 blocks
+==148629==    still reachable: 0 bytes in 0 blocks
+==148629==         suppressed: 0 bytes in 0 blocks
+==148629== Rerun with --leak-check=full to see details of leaked memory
+==148629== 
+==148629== For lists of detected and suppressed errors, rerun with: -s
+==148629== ERROR SUMMARY: 2 errors from 2 contexts (suppressed: 0 from 0)
